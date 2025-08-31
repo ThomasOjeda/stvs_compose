@@ -1,0 +1,34 @@
+version: "3"
+services:
+  node-service:
+    build:
+      context: ../stvs_node
+    image: thomasojeda/studentvisor-node #Image from dockerhub that gets pulled in the production server
+    ports:
+      - "80:5000"
+    #Mount a volume to allow node and pyflask to share files
+    volumes:
+      - node-pyflask-shared-volume:/studentsdata
+    depends_on:
+      - mongo-service
+      - pyflask-service
+
+  pyflask-service:
+    #The port must be open only if in development mode, check docker-compose.dev to see config
+    build:
+      context: ../stvs_python
+    image: thomasojeda/studentvisor-pyflask #Image from dockerhub that gets pulled in the production server
+    #Mount a volume to allow node and pyflask to share files
+    volumes:
+      - node-pyflask-shared-volume:/studentsdata
+
+  mongo-service:
+    image: mongo:4.4 #mongo 5 requires AVX support
+    volumes:
+      #(must not be deleted)The volume that stores the whole mongo database and persists it across multiple container runs
+      - mongo-db-volume:/data/db
+
+# Named volumes need this line
+volumes:
+  mongo-db-volume:
+  node-pyflask-shared-volume:
