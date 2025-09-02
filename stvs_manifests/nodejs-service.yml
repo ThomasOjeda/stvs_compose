@@ -1,0 +1,75 @@
+# node-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-service
+  namespace: studentvisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-service
+  template:
+    metadata:
+      labels:
+        app: node-service
+    spec:
+      containers:
+      - name: node
+        image: thomasojeda/studentvisor-node
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: NODE_ENV
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: MONGO_USER
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: MONGO_PASSWORD
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: JWT_SECRET
+        - name: MASTER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: MASTER_SECRET
+        command: ["npm", "start"]
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /studentsdata
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: node-pyflask-shared-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-service
+  namespace: studentvisor
+spec:
+  selector:
+    app: node-service
+  ports:
+  - port: 80
+    targetPort: 5000
+  type: LoadBalancer #Check if node port is better here

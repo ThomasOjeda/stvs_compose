@@ -1,0 +1,10 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: studentvisor
+data:
+  NODE_ENV: "production"
+  PYFLASK_ENV: "production"
+  DEBUG_MODE: "False"

@@ -1,0 +1,61 @@
+# pyflask-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyflask-service
+  namespace: studentvisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pyflask-service
+  template:
+    metadata:
+      labels:
+        app: pyflask-service
+    spec:
+      containers:
+      - name: pyflask
+        image: thomasojeda/studentvisor-pyflask
+        ports:
+        - containerPort: 5100
+        env:
+        - name: PYFLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: PYFLASK_ENV
+        - name: DEBUG_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DEBUG_MODE
+        command: ["gunicorn"]
+        args: ["-w", "4", "-b", "0.0.0.0:5100", "app:app"]
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /studentsdata
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: node-pyflask-shared-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyflask-service
+  namespace: studentvisor
+spec:
+  selector:
+    app: pyflask-service
+  ports:
+  - port: 5100
+    targetPort: 5100
+  type: ClusterIP
