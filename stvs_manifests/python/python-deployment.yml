@@ -45,16 +45,3 @@ spec:
       - name: shared-storage
         persistentVolumeClaim:
           claimName: node-pyflask-shared-volume
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pyflask-service
-  namespace: studentvisor
-spec:
-  selector:
-    app: pyflask-service
-  ports:
-  - port: 5100
-    targetPort: 5100
-  type: ClusterIP

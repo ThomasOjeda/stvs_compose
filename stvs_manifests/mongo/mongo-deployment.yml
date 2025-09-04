@@ -43,16 +43,3 @@ spec:
       - name: mongo-storage
         persistentVolumeClaim:
           claimName: mongo-db-volume
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongo-service
-  namespace: studentvisor
-spec:
-  selector:
-    app: mongo-service
-  ports:
-  - port: 27017
-    targetPort: 27017
-  type: ClusterIP
