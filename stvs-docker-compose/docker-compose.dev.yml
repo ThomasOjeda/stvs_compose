@@ -12,7 +12,7 @@ services:
       - MASTER_SECRET=mastermastersecretsecret
     volumes:
       #The volume that binds the project local source code to the container so nodemon can restart when a change occurs
-      - ../stvs_node:/app
+      - ../../stvs_node:/app
       #The volume that binds the project local data folder with the node container to see its contents in real time
       - ./studentsdata:/studentsdata
         #(anonymous volume) The volume that prevents the node_modules folder inside the container to be rewritten by the previous volume
@@ -30,7 +30,7 @@ services:
       - DEBUG_MODE=True
     volumes:
       #The volume that binds the project local source code to the container
-      - ../stvs_python:/app
+      - ../../stvs_python:/app
       #The volume that binds the project local data folder with the node container to see its contents in real time
       - ./studentsdata:/studentsdata
 

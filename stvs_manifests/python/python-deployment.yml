@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pyflask-service
+  name: pyflask-deployment
   namespace: studentvisor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pyflask-service
+      app: pyflask
   template:
     metadata:
       labels:
-        app: pyflask-service
+        app: pyflask
     spec:
       containers:
       - name: pyflask

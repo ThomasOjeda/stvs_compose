@@ -2,10 +2,10 @@ version: "3"
 services:
   node-service:
     build:
-      context: ../stvs_node
+      context: ../../stvs_node
     image: thomasojeda/studentvisor-node #Image from dockerhub that gets pulled in the production server
     ports:
-      - "80:5000"
+      - "5000:5000"
     #Mount a volume to allow node and pyflask to share files
     volumes:
       - node-pyflask-shared-volume:/studentsdata
@@ -16,7 +16,7 @@ services:
   pyflask-service:
     #The port must be open only if in development mode, check docker-compose.dev to see config
     build:
-      context: ../stvs_python
+      context: ../../stvs_python
     image: thomasojeda/studentvisor-pyflask #Image from dockerhub that gets pulled in the production server
     #Mount a volume to allow node and pyflask to share files
     volumes:

@@ -5,8 +5,8 @@ metadata:
   namespace: studentvisor
 spec:
   selector:
-    app: node-service
+    app: node
   ports:
-  - port: 80
+  - port: 5000
     targetPort: 5000
-  type: LoadBalancer #Check if node port is better here
+  type: ClusterIP #Check if node port is better here

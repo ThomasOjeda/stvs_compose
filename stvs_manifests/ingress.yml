@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: studentvisor-ingress
   namespace: studentvisor
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: your-domain.com  # Replace with your actual domain
@@ -14,6 +12,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: node-service
+            name: student-visor-frontend-service
             port:
               number: 80

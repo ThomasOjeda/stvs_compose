@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-service
+  name: mongo-deployment
   namespace: studentvisor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-service
+      app: mongo
   template:
     metadata:
       labels:
-        app: mongo-service
+        app: mongo
     spec:
       containers:
       - name: mongo
